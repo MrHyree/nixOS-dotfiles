@@ -1,0 +1,154 @@
+{
+  config,
+  pkgs,
+  unstable,
+  lib,
+  vars,
+  inputs,
+  ...
+}:
+let
+  homeDir = config.home.homeDirectory;
+in
+{
+  imports = [
+    ./programs
+  ];
+
+  home = {
+    username = vars.username;
+    homeDirectory = lib.mkForce "/home/${vars.username}";
+    stateVersion = "26.05";
+    packages = with pkgs; [
+      gnome.gvfs
+      nautilus
+      imagemagick
+      qimgv
+      gpu-screen-recorder
+      unstable.xournalpp
+      (callPackage ../pkgs/audiorelay/package.nix { })
+      (callPackage ../pkgs/niri-sidebar/package.nix { })
+      unstable.sonobus
+      mpvpaper
+      swappy
+      awww
+      (writeShellApplication {
+        name = "minecraft";
+        runtimeInputs = [
+          gamemode
+          util-linux
+        ];
+        text = ''
+          exec taskset -c 0-3 gamemoderun freesmlauncher
+        '';
+      })
+      wf-recorder
+      gifski
+      zbar
+      translate-shell
+      tesseract
+      unstable.krita
+      system-config-printer
+      pokemon-colorscripts
+      obs-studio
+      waydroid
+      (writeShellApplication {
+        name = "scrolllock_keyboard";
+        runtimeInputs = [
+          pkgs.brightnessctl
+          pkgs.procps
+        ];
+        text = ''
+          DEV="input*::scrolllock"
+          STATE_FILE="/tmp/scrolllock_active"
+
+          if [ -f "$STATE_FILE" ]; then
+            rm "$STATE_FILE"
+            pkill -f "scrolllock_daemon" || true
+            brightnessctl --device="$DEV" set 0
+            exit 0
+          fi
+
+          touch "$STATE_FILE"
+          echo "none" | brightnessctl --device="$DEV" set 1
+
+          (
+            exec -a scrolllock_daemon sh -c '
+              while [ -f /tmp/scrolllock_active ]; do
+                if [ "$(brightnessctl --device="input*::scrolllock" get)" -eq 0 ]; then
+                  brightnessctl --device="input*::scrolllock" set 1
+                fi
+                sleep 0.2
+              done
+            '
+          ) & disown
+        '';
+      })
+      evtest
+      ytmdesktop
+      easyeffects
+    ];
+
+    sessionVariables = {
+      TERMINAL = "wezterm";
+      EDITOR = "code";
+      WLR_DRM_NO_ATOMIC = "1";
+      QT_QPA_PLATFORM = "wayland;xcb";
+      NIXOS_OZONE_WL = "1";
+    };
+
+    file.".face".source = ../assets/profile.png;
+  };
+
+  xdg = {
+    userDirs = {
+      enable = true;
+      createDirectories = true;
+    };
+  };
+
+  nix.registry = {
+    dev = {
+      from = {
+        id = "dev";
+        type = "indirect";
+      };
+      to = {
+        type = "path";
+        path = "${config.home.homeDirectory}/dotfiles";
+      };
+    };
+  };
+
+  gtk = {
+    enable = true;
+    iconTheme = {
+      name = "Papirus-Dark";
+      package = pkgs.papirus-icon-theme;
+    };
+    gtk3.bookmarks = [
+      "file://${homeDir}/Documents"
+      "file://${homeDir}/Downloads"
+      "file://${homeDir}/Pictures"
+      "file://${homeDir}/Videos"
+      "file://${homeDir}/Music"
+      "file://${homeDir}/Workspace"
+      "file://${homeDir}/dotfiles"
+    ];
+  };
+
+  qt.enable = true;
+
+  home.file."Pictures/Wallpapers" = {
+    source = "${inputs.wallpapers}/gruvbox";
+    recursive = true;
+  };
+
+  home.activation.cloneNvim = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    if [ ! -d "$HOME/.config/nvim" ]; then
+      ${pkgs.git}/bin/git clone \
+        /home/hyree/dotfiles/assets/nvim_dots \
+         "$HOME/.config/nvim"
+   fi
+  '';
+}
