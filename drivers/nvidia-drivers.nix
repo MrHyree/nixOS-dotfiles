@@ -16,7 +16,7 @@ in
   config = mkIf cfg.enable {
     services.xserver.videoDrivers = [ "nvidia" ];
     hardware.nvidia = {
-      modesetting.enable = true;.
+      modesetting.enable = true;
       powerManagement.enable = false;
       open = false;
       nvidiaSettings = true;
