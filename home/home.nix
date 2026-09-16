@@ -22,6 +22,7 @@ in
     packages = with pkgs; [
       gnome.gvfs
       nautilus
+      inputs.freesmlauncher.packages.${pkgs.system}.freesmlauncher
       imagemagick
       qimgv
       gpu-screen-recorder

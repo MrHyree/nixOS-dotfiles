@@ -7,8 +7,6 @@
 {
   environment.systemPackages = [
     inputs.agenix.packages.${pkgs.system}.default
-    Sprograms.throne.enable = true;
-    programs.throne.tunMode.enable = true;
     
   ];
   age.identityPaths = [

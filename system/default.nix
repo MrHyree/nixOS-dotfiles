@@ -10,12 +10,15 @@
     ./core
     ./services
     ./apps
+    ../drivers
   ];
 
   networking.hostName = "furry";
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.timeout = 5;
+  boot.loader.systemd-boot.configurationLimit = 5; 
+  drivers.nvidia.enable = true;
 
   boot.kernelPackages = pkgs.linuxPackages_7_2;
 

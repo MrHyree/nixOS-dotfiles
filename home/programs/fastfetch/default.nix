@@ -35,6 +35,16 @@
           "keyColor" = "33";
         }
         {
+          "type" = "cpu";
+          "key" = " ";
+          "keyColor" = "33";
+        }
+        {
+          "type" = "gpu";
+          "key" = " ";
+          "keyColor" = "33";
+        }
+        {
           "type" = "packages";
           "key" = " ";
           "keyColor" = "33";
