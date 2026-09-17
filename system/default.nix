@@ -20,7 +20,8 @@
   boot.loader.systemd-boot.configurationLimit = 5; 
   drivers.nvidia.enable = true;
 
-  boot.kernelPackages = pkgs.linuxPackages_7_2;
+#  boot.kernelPackages = pkgs.linuxPackages_7_2;
+  boot.kernelPackages = pkgs.linuxPackages_6_18;
 
   services.tailscale.enable = true;
 

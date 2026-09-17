@@ -45,6 +45,11 @@
           "keyColor" = "33";
         }
         {
+          "type" = "ram";
+          "key" = " ";
+          "keyColor" = "33";
+        }
+        {
           "type" = "packages";
           "key" = " ";
           "keyColor" = "33";
@@ -70,8 +75,8 @@
           "keyColor" = "33";
         }
         {
-          "type" = "media";
-          "key" = "󰝚 ";
+          "type" = "disk";
+          "key" = " ";
           "keyColor" = "33";
         }
         "break"

@@ -12,5 +12,6 @@
     ./scx.nix
     ./portals.nix
     ./xserver.nix
+    ./throne.nix
   ];
 }
