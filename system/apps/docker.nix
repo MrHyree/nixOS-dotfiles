@@ -2,7 +2,7 @@
   virtualisation.docker = {
     enable = true;
     daemon.settings = {
-      ipv6 = true;
+      ipv6 = false;
       dns = [
         "1.1.1.1"
         "8.8.8.8"
